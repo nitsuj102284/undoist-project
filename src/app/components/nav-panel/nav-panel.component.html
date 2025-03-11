@@ -1,0 +1,183 @@
+<nav [class.open]="panel">
+    <div class="header">
+        <ng-template *ngTemplateOutlet="userBadgeTemplate"></ng-template>
+        <ng-template *ngTemplateOutlet="utilityNavTemplate"></ng-template>
+    </div>
+    <div class="navigation">
+        <ng-template *ngTemplateOutlet="navButtonsTemplate"></ng-template>
+    </div>
+</nav>
+
+
+
+<!-- templates -->
+
+<!-- user badge -->
+<ng-template #userBadgeTemplate>
+    <div class="user-badge">
+        <div class="user-image">
+            <img [src]="user?.profileImage" alt="user image">
+        </div>
+        <span class="user-name">{{ user?.firstName }}</span>
+    </div>
+</ng-template>
+
+
+
+<!-- utilty nav -->
+<ng-template #utilityNavTemplate>
+    <div class="utility-menu">
+
+        <!-- notifications btn -->
+        <button pButton
+            class="notifications-btn"
+            [text]="true"
+            [pTooltip]="notificationsBtnTooltip"
+            [showDelay]="500"
+        >
+            <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 61.2 70.3">
+                <path fill="currentColor" d="M38.5,58.6h17.1c-4.3-6.4-4.3-14.4-4.2-24.4v-3.2c0-5.7-2.3-10.9-6.1-14.7h0c-3.9-3.9-9.2-6.1-14.7-6.1-1.1,0-2.2,0-3.2.2h0c-4.4.7-8.4,2.8-11.4,5.8h0s0,0,0,0c-3.9,3.9-6.1,9.2-6.1,14.7v4c0,9.6.1,17.2-4.2,23.6h32.8ZM40.3,62.2c-.9,4.7-4.9,8-9.7,8s-8.8-3.4-9.7-8H1.8c-.8,0-1.4-.5-1.7-1.2-.3-.7,0-1.5.5-2,5.8-5.9,5.7-13.7,5.6-23.9h0s0-4.1,0-4.1c0-6.7,2.8-12.8,7.2-17.2h0c3.2-3.2,7.3-5.6,11.8-6.6v-1.9c0-2.2,1.3-4.1,3.3-4.9,2-.8,4.3-.4,5.8,1.2,1,1,1.6,2.4,1.6,3.8v1.9c4.6,1,8.7,3.4,11.9,6.6,4.4,4.4,7.2,10.5,7.2,17.2v3.1s0,0,0,0c0,10.8,0,19.1,5.7,24.9h0c.5.5.7,1.3.4,2-.3.7-.9,1.1-1.7,1.1h-19.1ZM35,64.8h0c.7-.7,1.3-1.6,1.5-2.6h-11.9c.6,2.1,2.3,3.7,4.5,4.2,2.1.5,4.4,0,5.9-1.6h0ZM30.6,6.7c.6,0,1.2,0,1.7,0v-1.4c0-.5-.1-1-.4-1.3-.3-.4-.8-.6-1.3-.6s-1,.2-1.3.6c-.3.4-.5.9-.4,1.3v1.4h1.8"/>
+            </svg>
+            <ng-template #notificationsBtnTooltip>
+                <span class="text">Open notifications</span>
+                <span class="keyboard-shortcut-label">O</span> then <span class="keyboard-shortcut-label">N</span>
+            </ng-template>
+        </button>
+
+        <!-- toggle sidebar button -->
+        <button pButton
+            class="toggle-sidebar-btn"
+            [text]="true"
+            [pTooltip]="toggleSideBarBtnTooltip"
+            [showDelay]="500"
+            (click)="onPanelToggle()"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path fill="currentColor" fill-rule="evenodd" d="M19 4.001H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-12a2 2 0 0 0-2-2Zm-15 2a1 1 0 0 1 1-1h4v14H5a1 1 0 0 1-1-1v-12Zm6 13h9a1 1 0 0 0 1-1v-12a1 1 0 0 0-1-1h-9v14Z" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+        <ng-template #toggleSideBarBtnTooltip>
+            {{ !panel ? 'Open' : 'Close' }} sidebar <span class="keyboard-shortcut-label">M</span>
+        </ng-template>
+    </div>
+</ng-template>
+
+
+<!-- nav buttons -->
+<ng-template #navButtonsTemplate>
+
+    <!-- new -->
+    <button pButton
+        class="new-btn nav-btn primary"
+        [text]="true"
+        [pTooltip]="addTaskBtnTooltip"
+        [showDelay]="500"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" fill-rule="evenodd" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1 1 5.925 1 12s4.925 11 11 11Zm-.711-16.5a.75.75 0 1 1 1.5 0v4.789H17.5a.75.75 0 0 1 0 1.5h-4.711V17.5a.75.75 0 0 1-1.5 0V12.79H6.5a.75.75 0 1 1 0-1.5h4.789V6.5Z" clip-rule="evenodd"></path>
+    </svg>
+    Add task
+    </button>
+    <ng-template #addTaskBtnTooltip>
+        Add task <span class="keyboard-shortcut-label">Q</span>
+    </ng-template>
+
+    <!-- search -->
+    <button pButton
+        class="search-btn nav-btn"
+        [text]="true"
+        [pTooltip]="searchBtnTooltip"
+        [showDelay]="500"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path fill="currentColor" fill-rule="evenodd" d="M16.29 15.584a7 7 0 1 0-.707.707l3.563 3.563a.5.5 0 0 0 .708-.707l-3.563-3.563ZM11 17a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" clip-rule="evenodd"></path>
+        </svg>
+        Search
+    </button>
+    <ng-template #searchBtnTooltip>
+        Open Quick Find <span class="keyboard-shortcut-label">⌘</span> <span class="keyboard-shortcut-label">K</span>
+    </ng-template>
+
+    <!-- inbox -->
+    <button pButton
+        class="inbox-btn nav-btn"
+        [text]="true"
+        [pTooltip]="inboxBtnTooltip"
+        [showDelay]="500"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" fill-rule="evenodd" d="M8.062 4h7.876a2 2 0 0 1 1.94 1.515l2.062 8.246c.04.159.06.322.06.486V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3.754a2 2 0 0 1 .06-.485L6.12 5.515A2 2 0 0 1 8.061 4Zm0 1a1 1 0 0 0-.97.758L5.03 14.004a1 1 0 0 0-.03.242V18a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.754a.997.997 0 0 0-.03-.242L16.91 5.758a1 1 0 0 0-.97-.758H8.061Zm6.643 10a2.75 2.75 0 0 1-5.41 0H7a.5.5 0 1 1 0-1h2.75a.5.5 0 0 1 .5.5 1.75 1.75 0 1 0 3.5 0 .5.5 0 0 1 .5-.5H17a.5.5 0 0 1 0 1h-2.295Z" clip-rule="evenodd"></path>
+    </svg>
+        Inbox
+    </button>
+    <ng-template #inboxBtnTooltip>
+        Go to Inbox <span class="keyboard-shortcut-label">G</span> then <span class="keyboard-shortcut-label">i</span>
+    </ng-template>
+
+    <!-- today -->
+    <button pButton
+        class="today-btn nav-btn"
+        [text]="true"
+        [pTooltip]="todayBtnTooltip"
+        [showDelay]="500"
+    >
+    <svg width="24" height="24" viewBox="0 0 24 24">
+        <g fill="currentColor" fill-rule="evenodd">
+            <path fill-rule="nonzero" d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H6zm1 3h10a.5.5 0 1 1 0 1H7a.5.5 0 0 1 0-1z"></path>
+            <text font-family="-apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'" font-size="9" transform="translate(4 2)" font-weight="500"><tspan x="8" y="15" text-anchor="middle">11</tspan></text>
+        </g>
+    </svg>
+        Today
+    </button>
+    <ng-template #todayBtnTooltip>
+        Go to Today <span class="keyboard-shortcut-label">G</span> then <span class="keyboard-shortcut-label">T</span>
+    </ng-template>
+
+    <!-- upcoming -->
+    <button pButton
+        class="upcoming-btn nav-btn"
+        [text]="true"
+        [pTooltip]="upcomingBtnTooltip"
+        [showDelay]="500"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" fill-rule="evenodd" d="M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H6Zm10 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-3-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-5 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm9-5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-5 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-3-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a.5.5 0 0 0 0 1h10a.5.5 0 0 0 0-1H7Z" clip-rule="evenodd"></path>
+    </svg>
+        Upcoming
+    </button>
+    <ng-template #upcomingBtnTooltip>
+        Go to Upcoming <span class="keyboard-shortcut-label">G</span> then <span class="keyboard-shortcut-label">U</span>
+    </ng-template>
+
+    <!-- filters and labels -->
+    <button pButton
+        class="filters-btn nav-btn"
+        [text]="true"
+        [pTooltip]="filtersBtnTooltip"
+        [showDelay]="500"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" fill-rule="evenodd" d="M17.5 6.001h-3a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5Zm-3-1a1.5 1.5 0 0 0-1.5 1.5v3a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5v-3a1.5 1.5 0 0 0-1.5-1.5h-3Zm-8 9h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm-1.5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3Zm9.5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm-1.5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3Zm-6.5-8.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm-1.5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3Z" clip-rule="evenodd"></path>
+    </svg>
+        Filters & Labels
+    </button>
+    <ng-template #filtersBtnTooltip>
+        Go to Filters and Labels <span class="keyboard-shortcut-label">G</span> then <span class="keyboard-shortcut-label">V</span>
+    </ng-template>
+
+    <!-- completed -->
+    <button pButton
+        class="completed-btn nav-btn"
+        [text]="true"
+        [pTooltip]="completedBtnTooltip"
+        [showDelay]="500"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" fill-rule="evenodd" d="M12 21.001a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-1a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm-4.354-8.104a.5.5 0 0 1 .708 0l2.146 2.147 5.146-5.147a.5.5 0 0 1 .708.708l-5.5 5.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 0 1 0-.708Z" clip-rule="evenodd"></path>
+    </svg>
+        Completed
+    </button>
+    <ng-template #completedBtnTooltip>
+        Go to Completed <span class="keyboard-shortcut-label">G</span> then <span class="keyboard-shortcut-label">C</span>
+    </ng-template>
+</ng-template>

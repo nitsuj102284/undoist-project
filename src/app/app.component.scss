@@ -1,0 +1,11 @@
+.layout-wrapper {
+    display: flex;
+
+    .layout-main {
+        display: flex;
+        flex: 1;
+        padding: 0 0.5em;
+        flex-direction: column;
+    }
+
+}
