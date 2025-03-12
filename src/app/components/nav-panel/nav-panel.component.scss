@@ -31,26 +31,6 @@ nav {
         display: flex;
         height: var(--header-height);
 
-        .user-badge {
-            display: flex;
-            gap: 1em;
-            align-items: center;
-        
-            .user-image {
-                height: 2em;
-                width: 2em;
-                border-radius: 50%;
-                overflow: hidden;
-        
-                img {
-                    height: 100%;
-                    width: 100%;
-                    object-fit: cover;
-                }
-            }
-        
-        }
-
         .utility-menu {
             display: flex;
             margin-left: auto;
@@ -67,13 +47,37 @@ nav {
         padding: 0.25em;
         justify-content: flex-start;
 
-        &:hover {
-            background: var(--p-primary-100);
+        &:hover,
+        &.active {
+            background: var(--button-hover-color);
+        }
+
+        &.active {
+            color: var(--primary-color);
+            
+            svg {
+                display: none;
+
+                &.active {
+                    display: initial;
+                }
+                
+            }
+
         }
 
         &.new-btn {
             margin-bottom: 0.5em;
         }
+
+        svg {
+
+            &.active {
+                display: none;
+            }
+
+        }
+
     }
 
 }

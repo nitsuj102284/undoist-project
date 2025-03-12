@@ -1,0 +1,40 @@
+.login-wrapper {
+    --logo-height: 10em;
+    
+    display: flex;
+    position: absolute;
+    width: 90%;
+    max-width: 30em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - var(--logo-height) / 2));
+    flex-direction: column;
+    gap: 2em;
+
+    .logo {
+        display: flex;
+        color: linen;
+        justify-content: center;
+
+        svg {
+            height: var(--logo-height);
+        }
+    }
+
+    .card {
+        padding: 2em;
+        background: var(--p-surface-0);
+        outline: solid 2em rgba(0,255,255,0.2);
+
+        @media screen and (max-width: 450px) {
+
+            padding: 1em;
+
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+    }
+}

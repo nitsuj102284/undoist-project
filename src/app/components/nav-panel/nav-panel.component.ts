@@ -5,12 +5,15 @@ import { UserService } from '../../services/user/user.service';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
+import { HelperService } from '../../services/helper/helper.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-nav-panel',
   imports: [
     CommonModule,
     ButtonModule,
+    RouterModule,
     TooltipModule
   ],
   templateUrl: './nav-panel.component.html',
@@ -19,14 +22,17 @@ import { CommonModule } from '@angular/common';
 export class NavPanelComponent implements OnInit {
 
   panel: boolean = true;
+  specialKeySymbol: string;
   user: User;
 
   constructor(
+    private helperService: HelperService,
     private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.initUserSubscription();
+    this.setSpecialKeySymbol();
   }
 
   initUserSubscription(): void {
@@ -35,6 +41,10 @@ export class NavPanelComponent implements OnInit {
         tap(user => this.user = user)
       )
       .subscribe();
+  }
+  
+  setSpecialKeySymbol(): void {
+    this.specialKeySymbol = this.helperService.getSpecialKeySymbol();
   }
   
   onPanelToggle(): void {

@@ -1,11 +1,18 @@
 .layout-wrapper {
     display: flex;
+    gap: 2em;
 
     .layout-main {
         display: flex;
         flex: 1;
-        padding: 0 0.5em;
         flex-direction: column;
+
+        main {
+            width: 100%;
+            max-width: 60em;
+            padding: 1em;
+            margin: 0 auto;
+        }
     }
 
 }

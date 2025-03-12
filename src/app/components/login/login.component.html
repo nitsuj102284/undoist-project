@@ -1,0 +1,11 @@
+<div class="users">
+    <div *ngFor="let user of users"
+        class="user-badge"
+        (click)="onUserSelect(user.id)"
+    >
+        <div class="user-image">
+            <img src="{{ user.profileImage }}" alt="{{ user.firstName}}'s profile image" />
+        </div>
+        {{ user.firstName }} {{ user.lastName }}
+    </div>
+</div>

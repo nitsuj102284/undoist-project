@@ -1,0 +1,18 @@
+.users {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-badge {
+    padding: 1em;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--p-green-100);
+    }
+
+    .user-image {
+        --image-size: 3em;
+    }
+
+}

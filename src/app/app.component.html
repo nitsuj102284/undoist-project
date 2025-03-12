@@ -1,9 +1,9 @@
 <div class="layout-wrapper">
-  <div class="layout-side">
+  <div *ngIf="!kiosk" class="layout-side">
     <app-nav-panel></app-nav-panel>
   </div>
   <div class="layout-main">
-    <app-header></app-header>
+    <app-header *ngIf="!kiosk"></app-header>
     <main>
       <router-outlet></router-outlet>
     </main>

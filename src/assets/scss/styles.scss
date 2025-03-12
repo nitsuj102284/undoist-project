@@ -3,9 +3,35 @@ html, body {
 }
 
 body {
+    min-height: 100vh;
     background: var(--bg-color);
     font-family: var(--font-family);
     font-size: 16px;
+    color: var(--text-color);
+
+    &.view-login {
+        background-color:#ffec99;
+        background-image:
+            radial-gradient(at 96% 2%, hsla(304,61%,65%,1) 0px, transparent 50%),
+            radial-gradient(at 8% 98%, hsla(159,73%,69%,1) 0px, transparent 50%);
+    }
+
+}
+
+h1, h2, h3, h4, h5 {
+    margin: 0 0 1.5rem 0;
+
+    + p, + h1, + h2, + h3, + h4, + h5 {
+        & {
+            margin-top: 1.5rem;
+        }
+
+    }
+
+}
+
+p {
+    margin-top: 0;
 }
 
 .keyboard-shortcut-label {
@@ -16,4 +42,28 @@ body {
     font-size: 0.75em;
     align-items: center;
     justify-content: center;
+}
+
+/* user badge global style */
+.user-badge {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    transition: background-color 0.2s;
+
+    .user-image {
+        --image-size: 2em;
+        height: var(--image-size);
+        width: var(--image-size);
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
 }
