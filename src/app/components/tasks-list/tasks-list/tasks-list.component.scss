@@ -1,0 +1,23 @@
+.task-group {
+    margin-top: 2em;
+
+    .task-group-header {
+        padding-bottom: 0.25em;
+        border-bottom: solid 1px var(--p-gray-200);
+        font-weight: bold;
+    }
+
+    .tasks {
+        margin-left: 1em;
+    }
+
+}
+
+.tasks {
+
+    .task {
+        padding: 1em 0;
+        border-bottom: solid 1px var(--p-gray-200);
+    }
+
+}

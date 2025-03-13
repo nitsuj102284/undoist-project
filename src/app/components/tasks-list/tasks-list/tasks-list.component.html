@@ -1,0 +1,27 @@
+<ng-container *ngFor="let tg of taskGroups"
+>
+    <div *ngIf="!tg.catchAll; else catchAllTemplate"
+        class="task-group"
+    >
+        <div class="task-group-header">{{ tg.title }}</div>
+        <div class="tasks">
+            <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: tg }"></ng-template>
+        </div>
+    </div>
+
+    <ng-template #catchAllTemplate>
+        <div class="tasks">
+            <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: tg }"></ng-template>
+        </div>
+    </ng-template>
+</ng-container>
+
+
+<!-- template -->
+
+<!-- tasks -->
+<ng-template #tasksTemplate let-tg>
+    <div *ngFor="let t of tg.tasks" class="task">
+        {{ t.title }}
+    </div>
+</ng-template>

@@ -1,6 +1,10 @@
 export interface EntityIndex {
-    entity: new () => any;
-    columns: string[];
+    entityName: string;
+    indexes: {
+        name: string,
+        columns: string[],
+        isUnique?: boolean
+    }[];
 }
 
 

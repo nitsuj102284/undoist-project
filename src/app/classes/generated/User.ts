@@ -7,5 +7,8 @@ export class User {
     lastName: string;
     profileImage: string;
     test: string;
+    createdAt: Date;
+    modifiedAt: Date;
+    deletedAt: Date;
     projects: Project[];
 }

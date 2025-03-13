@@ -2,7 +2,6 @@ import { Component, Inject, Renderer2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NavPanelComponent } from './components/nav-panel/nav-panel.component';
 import { HeaderComponent } from './components/header/header.component';
-import { DatabaseService } from './services/database/database.service';
 import { filter, tap } from 'rxjs';
 import { CommonModule, DOCUMENT } from '@angular/common';
 
@@ -22,7 +21,6 @@ export class AppComponent {
   kiosk: boolean;
 
   constructor(
-    private databaseService: DatabaseService,
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private route: ActivatedRoute,

@@ -7,6 +7,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { HelperService } from '../../services/helper/helper.service';
 import { RouterModule } from '@angular/router';
+import { ProjectListingComponent } from '../project-listing/project-listing.component';
 
 @Component({
   selector: 'app-nav-panel',
@@ -14,7 +15,8 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     ButtonModule,
     RouterModule,
-    TooltipModule
+    TooltipModule,
+    ProjectListingComponent
   ],
   templateUrl: './nav-panel.component.html',
   styleUrl: './nav-panel.component.scss'

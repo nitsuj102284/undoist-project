@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../classes/generated/User';
-import { Project } from '../../classes/generated/Project';
 import { HelperService } from '../helper/helper.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { EntityIndex, EntityRecords } from '../../interfaces/entity-records.interface';
@@ -27,8 +25,8 @@ export class DatabaseService {
     if (!this._db) this.openDatabase();
   }
 
-  getById(storeName: string, id: string): Observable<any> {
-    const observable: Observable<any[]> = new Observable(observer => {
+  getById<T>(storeName: string, id: string): Observable<T> {
+    const observable: Observable<T> = new Observable(observer => {
       const transaction: IDBTransaction = this._db.transaction([storeName], 'readonly');
       const store: IDBObjectStore = transaction.objectStore(storeName);
       const index: IDBIndex = store.index('id');
@@ -49,8 +47,8 @@ export class DatabaseService {
     return observable;
   }
 
-  getAll(storeName: string): Observable<any[]> {
-    const observable: Observable<any[]> = new Observable(observer => {
+  getAll<T>(storeName: string): Observable<T[]> {
+    const observable: Observable<T[]> = new Observable(observer => {
       const transaction: IDBTransaction = this._db.transaction([storeName], 'readonly');
       const store: IDBObjectStore = transaction.objectStore(storeName);
       const request: IDBRequest = store.getAll();
@@ -68,24 +66,71 @@ export class DatabaseService {
     return observable;
   }
 
-  addRecords(entityRecords: EntityRecords[]): Observable<void> {
-    const observable: Observable<any> = new Observable(observer => {
+  getByIndexValues<T>(storeName: string, indexName: string, values: (string | number | boolean)[]): Observable<T[]> {
+    const observable: Observable<T[]> = new Observable(observer => {
+      const transaction: IDBTransaction = this._db.transaction([storeName], 'readonly');
+      const store: IDBObjectStore = transaction.objectStore(storeName);
+      const index: IDBIndex = store.index(indexName);
+      
+      values = this.helperService.mapBooleansToBit(values);
+      const rangeValue: any = values.length === 1
+        ? values[0] : values;
+      const range: IDBKeyRange = IDBKeyRange.only(rangeValue);
+
+      const request: IDBRequest = index.openCursor(range);
+      const results: T[] = [];
+
+      request.onsuccess = (e: any) => {
+        const cursor: IDBCursorWithValue = e.target.result;
+        if (!cursor) {
+          observer.next(results);
+          observer.complete();
+          return;
+        }
+
+        results.push(cursor.value);
+        cursor.continue();
+      }
+
+      request.onerror = (e: any) => {
+        observer.error(e);
+      }
+    });
+
+    return observable;
+  }
+
+  addRecords<T>(entityRecords: EntityRecords[]): Observable<T[]> {
+    const observable: Observable<T[]> = new Observable(observer => {
       const storeNames: string[] = entityRecords.map(entity => entity.entityName);
       const transaction: IDBTransaction = this._db.transaction(storeNames, 'readwrite');
       
+      const insertedRecords: T[] = [];
       entityRecords.forEach(entity => {
         const { entityName, records } = entity;
         const store: IDBObjectStore = transaction.objectStore(entityName);
 
         records.forEach(record => {
-          const request: IDBRequest = store.add(record);
+          let mappedRecord: any = { ...record };
+          
+          //id
+          if (!record.id) mappedRecord.id = this.helperService.generateUuid();
 
+          //timestamps
+          const date = new Date().toISOString();
+          mappedRecord.createdAt = date;
+          mappedRecord.modifiedAt = date;
+          mappedRecord = this.helperService.mapObjectBooleansToBit(mappedRecord);
+
+          insertedRecords.push(mappedRecord);
+
+          const request: IDBRequest = store.add(mappedRecord);
           request.onerror = (e: any) => observer.error(`Error adding ${entityName}: ${e.target.error}`);
         })
       });
 
       transaction.oncomplete = () => {
-        observer.next(true);
+        observer.next(insertedRecords);
         observer.complete();
       }
 
@@ -110,16 +155,43 @@ export class DatabaseService {
 
     //add entities
     const entities: EntityIndex[] = [
-      { entity: Project, columns: ['id', 'userId']},
-      { entity: User, columns: ['id', 'email', 'firstName', 'lastName']}
+      {
+        entityName: 'project',
+        indexes: [
+          { name: 'id', columns: ['id'], isUnique: true },
+          { name: 'userId', columns: ['userId'] },
+          { name: 'default', columns: ['userId', 'isDefault'], isUnique: true }
+        ]
+      },
+      {
+        entityName: 'task',
+        indexes: [
+          { name: 'id', columns: ['id'], isUnique: true },
+          { name: 'projectId', columns: ['projectId']},
+          { name: 'parentTaskId', columns: ['parentTaskId']}
+        ]
+      },
+      {
+        entityName: 'taskGroup',
+        indexes: [
+          { name: 'id', columns: ['id'], isUnique: true },
+          { name: 'projectId', columns: ['projectId']}
+        ]
+      },
+      {
+        entityName: 'user',
+        indexes: [
+          { name: 'id', columns: ['id'], isUnique: true }
+        ]
+      }
     ];
 
     entities.forEach(entityIndex => this.createDbSchema(entityIndex));
   }
 
-  private createDbSchema<T>(entityIndex: EntityIndex): void {
-    const { entity, columns } = entityIndex;
-    const storeName: string = this.helperService.stringToCamelCase(entity.name);
+  private createDbSchema(entityIndex: EntityIndex): void {
+    const { entityName, indexes } = entityIndex;
+    const storeName: string = this.helperService.stringToCamelCase(entityName);
     const storeExists: boolean = this._db.objectStoreNames.contains(storeName);
     let store: IDBObjectStore;
 
@@ -133,8 +205,9 @@ export class DatabaseService {
     if (!store) store = this._db.createObjectStore(storeName, { keyPath: 'id' });
 
     //add each index
-    columns.forEach(col => {
-      store.createIndex(col, col);
+    indexes.forEach(index => {
+      const columns = index.columns.length === 1 ? index.columns[0] : index.columns;
+      store.createIndex(index.name, columns, { unique: index.isUnique || false });
     });
 
   }

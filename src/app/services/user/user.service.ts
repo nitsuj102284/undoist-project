@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { User } from '../../classes/generated/User';
 import { DatabaseService } from '../database/database.service';
 import { EntityRecords } from '../../interfaces/entity-records.interface';
@@ -45,18 +45,18 @@ export class UserService {
     return this.dbReady()
       .pipe(
         switchMap(() => this.logIn(savedUserId)),
-        switchMap(user => user ? of(true) : of (false))
+        map(user => user ? true : false)
       );
   }
 
   fetchUsers(): void {
-    this.databaseService.getAll(this._entityName)
+    this.databaseService.getAll<User>(this._entityName)
       .pipe(
         switchMap(users => {
           if (users.length) return of(users);
           return this.addTestUsers()
             .pipe(
-              switchMap(() => this.databaseService.getAll(this._entityName))
+              switchMap(() => this.databaseService.getAll<User>(this._entityName))
             )
         })
       )
@@ -64,10 +64,10 @@ export class UserService {
   }
 
   getUserById(userId: string): Observable<User> {
-    return this.databaseService.getById(this._entityName, userId);
+    return this.databaseService.getById<User>(this._entityName, userId);
   }
 
-  addTestUsers(): Observable<void> {
+  addTestUsers(): Observable<User[]> {
     const users: User[] = [];
 
     const user1: User = new User();
@@ -90,7 +90,7 @@ export class UserService {
       entityName: this._entityName,
       records: users
     }
-    return this.databaseService.addRecords([entityRecords]);
+    return this.databaseService.addRecords<User>([entityRecords]);
   }
 
   logIn(userId: string): Observable<User> {
