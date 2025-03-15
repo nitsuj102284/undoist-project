@@ -8,6 +8,8 @@ import { EntityRecords } from '../../interfaces/entity-records.interface';
 import { HelperService } from '../helper/helper.service';
 import { TaskService } from '../task/task.service';
 import { TaskGroupService } from '../task-group/task-group.service';
+import { TaskGroup } from '../../classes/generated/TaskGroup';
+import { Task } from '../../classes/generated/Task';
 
 @Injectable({
   providedIn: 'root'
@@ -147,7 +149,64 @@ export class ProjectService {
 
     return this.insertProject(project)
       .pipe(
-        map(projects => projects[0])
+        map(projects => projects[0]),
+        switchMap(project => this.generateMockTasks(project.id)
+          .pipe(
+            map(() => project)
+          )
+        )
+      );
+  }
+
+  private generateMockTasks(projectId: string): Observable<void> {
+    const currentUser: User = this._currentUser;
+    const taskGroup: TaskGroup = new TaskGroup();
+    taskGroup.title = `${currentUser.firstName}'s Urgent Tasks`;
+    taskGroup.projectId = projectId;
+    taskGroup.sortOrder = 1;
+
+    return this.taskGroupService.insertTaskGroup(taskGroup)
+      .pipe(
+        switchMap(taskGroup => {
+          const task: Task = new Task();
+          task.title = 'Call the doctor';
+          task.description = 'Dr. Jones: <strong>813-555-1234</strong>'
+          task.projectId = projectId;
+          task.taskGroupId = taskGroup.id;
+          task.sortOrder = 1;
+
+          return this.taskService.insertTask(task)
+            .pipe(
+              map(() => taskGroup)
+            );
+        }),
+        switchMap(taskGroup => {
+          const task: Task = new Task();
+          task.title = 'Pay the phone bill';
+          task.projectId = projectId;
+          task.taskGroupId = taskGroup.id;
+          task.sortOrder = 2;
+
+          return this.taskService.insertTask(task)
+        }),
+        switchMap(() => {
+          const taskGroup: TaskGroup = new TaskGroup();
+          taskGroup.title = `We can do it later, ${currentUser.firstName}`;
+          taskGroup.projectId = projectId;
+          taskGroup.sortOrder = 2;
+
+          return this.taskGroupService.insertTaskGroup(taskGroup);
+        }),
+        switchMap(taskGroup => {
+          const task: Task = new Task();
+          task.title = 'Clean the garage';
+          task.projectId = projectId;
+          task.taskGroupId = taskGroup.id;
+          task.sortOrder = 1;
+
+          return this.taskService.insertTask(task);
+        }),
+        map(() => null)
       );
   }
 
