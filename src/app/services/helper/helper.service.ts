@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
 
-  constructor() { }
+  constructor(
+    @Inject(DOCUMENT) private document: Document
+  ) { }
 
   generateUuid(): string {
     return crypto.randomUUID();
@@ -66,6 +70,46 @@ export class HelperService {
   getSpecialKeySymbol(): string {
     const isMac: boolean = window.navigator.platform.startsWith('Mac');
     return isMac ? '⌘' : '^';
+  }
+
+
+  focusNextElement(): void {
+    const focusableEls: HTMLElement[] = Array.from(this.document.querySelectorAll('input, select, textarea, button, .ql-editor'))
+      .map(el => el as HTMLElement)
+      .filter(el => this.isElementVisible(el));
+    const focusedIndex: number = focusableEls.indexOf(this.document.activeElement as HTMLElement);
+
+    if (focusedIndex !== -1 && focusedIndex < focusableEls.length - 1) {
+      focusableEls[focusedIndex + 1].focus();
+      return;
+    }
+
+    focusableEls[0].focus();
+  }
+
+
+  isElementVisible(el: HTMLElement): boolean {
+    let currentEl: HTMLElement = el;
+    while (currentEl) {
+      const style = window.getComputedStyle(currentEl);
+      if (style.visibility === 'hidden' || style.display === 'none') return false;
+
+      currentEl = currentEl.parentElement;
+    }
+
+    return true;
+  }
+
+
+  clearFormControlsWithOnlyHtml(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(k => {
+      const control: FormControl = <FormControl>formGroup.controls[k];
+      const val: any = control.value;
+      if (typeof val !== 'string') return;
+
+      const textVal: string = val.replace(/<[^>]*>/g, '').trim();
+      if (!textVal) control.setValue(null);
+    });
   }
 
 }

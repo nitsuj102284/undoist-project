@@ -14,10 +14,13 @@ import { TaskGroupService } from '../task-group/task-group.service';
 })
 export class ProjectService {
 
+  private _currentProjectSubject$: BehaviorSubject<Project> = new BehaviorSubject(null);
   private _currentUser: User;
+  private _defaultProject: Project;
   private readonly _entityName: string = 'project';
   private _projectsSubject$: BehaviorSubject<Project[]> = new BehaviorSubject([]);
 
+  currentProject$: Observable<Project> = this._currentProjectSubject$.asObservable();
   projects$: Observable<Project[]> = this._projectsSubject$.asObservable();
 
   constructor(
@@ -41,6 +44,11 @@ export class ProjectService {
       .subscribe();
   }
 
+  setCurrentProject(project?: Project): void {
+    project = project || this._defaultProject;
+    this._currentProjectSubject$.next(project);
+  }
+
   getDefaultProject(withTasks?: boolean): Observable<Project> {
     const userId: string = this._currentUser?.id;
     if (!userId) return of(null);
@@ -52,7 +60,8 @@ export class ProjectService {
           if (!project) return this.createDefaultProject();
           if (withTasks) return this.getTasksForProject(project);
           return of(project);
-        })
+        }),
+        tap(project => this._defaultProject = project)
       );
   }
 
@@ -71,6 +80,8 @@ export class ProjectService {
       )
   }
 
+
+
   getProjectById(id: string, withTasks?: boolean): Observable<Project> {
     const userId: string = this._currentUser?.id;
     if (!userId) return of(null);
@@ -81,6 +92,18 @@ export class ProjectService {
           if (project.userId !== this._currentUser.id) return of(null);
           if (withTasks) return this.getTasksForProject(project);
           return of(project);
+        })
+      );
+  }
+
+  refreshTasksForCurrentProject(): Observable<Project> {
+    const currentProject: Project = this._currentProjectSubject$.value;
+    if (!currentProject) return of(null);
+    
+    return this.getTasksForProject(currentProject)
+      .pipe(
+        tap(project => {
+          this._currentProjectSubject$.next(project)
         })
       );
   }

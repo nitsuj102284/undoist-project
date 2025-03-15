@@ -1,0 +1,43 @@
+<div class="add-task-wrapper">
+    <div class="content" *ngIf="formGroup">
+        <!-- title -->
+        <app-inline-editor
+            class="field-title"
+            [fformGroup]="formGroup"
+            fformControlName="title"
+            placeholder="Walk the dog after work"
+            tabBehavior="focus"
+            [preventLineBreaks]="true"
+            [focusOnLoad]="true"
+            (onEnter)="onTitleInputEnterKey()"
+            autofocus
+        ></app-inline-editor>
+    
+        <!-- description -->
+        <app-inline-editor
+            class="field-description"
+            [fformGroup]="formGroup"
+            fformControlName="description"
+            placeholder="Description"
+            tabBehavior="focus"
+        ></app-inline-editor>
+    </div>
+    
+    <div class="footer">
+        <div class="action-buttons">
+            <button pButton
+                class="save-btn"
+                [disabled]="!formGroup?.valid"
+                (click)="onAdd()"
+            >
+                Add task
+            </button>
+            <button pButton
+                class="cancel-btn p-button-text"
+                (click)="onCancel()"
+            >
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>

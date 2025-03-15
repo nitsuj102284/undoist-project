@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { HelperService } from '../../services/helper/helper.service';
 import { RouterModule } from '@angular/router';
 import { ProjectListingComponent } from '../project-listing/project-listing.component';
+import { TaskService } from '../../services/task/task.service';
 
 @Component({
   selector: 'app-nav-panel',
@@ -29,6 +30,7 @@ export class NavPanelComponent implements OnInit {
 
   constructor(
     private helperService: HelperService,
+    private taskService: TaskService,
     private userService: UserService
   ) {}
 
@@ -51,6 +53,10 @@ export class NavPanelComponent implements OnInit {
   
   onPanelToggle(): void {
     this.panel = !this.panel;
+  }
+
+  onAddTaskBtn(): void {
+    this.taskService.setShowAddTaskDialog(true);
   }
 
 }

@@ -1,27 +1,52 @@
-<ng-container *ngFor="let tg of taskGroups"
->
-    <div *ngIf="!tg.catchAll; else catchAllTemplate"
-        class="task-group"
-    >
-        <div class="task-group-header">{{ tg.title }}</div>
-        <div class="tasks">
-            <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: tg }"></ng-template>
-        </div>
-    </div>
-
-    <ng-template #catchAllTemplate>
-        <div class="tasks">
-            <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: tg }"></ng-template>
-        </div>
-    </ng-template>
+<!-- catch-all task group -->
+<ng-container *ngIf="defaultTaskGroup?.tasks.length">
+    <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: defaultTaskGroup }"></ng-template>
 </ng-container>
 
+<!-- other task groups -->
+<p-accordion
+    styleClass="task-groups"
+    [multiple]="true"
+    [value]="activeTaskGroupTabs"
+    expandIcon="pi pi-chevron-right"
+>
+    <ng-container *ngFor="let tg of taskGroups; let i = index">
+        <p-accordion-panel [value]="i">
+            <p-accordion-header>
+                <span class="task-group-title">{{ tg.title }}</span>
+                <button pButton
+                    class="accordion-menu-btn p-button-text"
+                    icon="pi pi-ellipsis-h"
+                    (click)="$event.stopPropagation(); taskGroupMenu.toggle($event)"
+                ></button>
+                <p-menu #taskGroupMenu
+                    [model]="taskGroupMenuItems"
+                    [popup]="true"
+                    appendTo="body"
+                ></p-menu>
+            </p-accordion-header>
+            <p-accordion-content>
+                <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: tg }"></ng-template>
+            </p-accordion-content>
+        </p-accordion-panel>
+    </ng-container>
+</p-accordion>
 
-<!-- template -->
 
-<!-- tasks -->
+
+<!-- templates -->
+
+<!-- tasks template -->
 <ng-template #tasksTemplate let-tg>
-    <div *ngFor="let t of tg.tasks" class="task">
-        {{ t.title }}
+    <div class="tasks">
+        <div *ngFor="let t of tg.tasks"
+            class="task"
+        >
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+                <div class="title" [innerHtml]="t.title"></div>
+                <div class="description" [innerHtml]="t.description"></div>
+            </div>
+        </div>
     </div>
 </ng-template>

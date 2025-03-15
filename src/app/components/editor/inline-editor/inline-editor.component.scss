@@ -1,0 +1,67 @@
+.inline-editor {
+
+    &.show-toolbar {
+
+        ::ng-deep .ql-toolbar {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    }
+
+    &.border {
+
+        ::ng-deep {
+
+            .p-editor-container {
+            
+                .p-editor-content {
+                    border: solid 1px var(--p-editor-content-border-color);
+
+                    .ql-editor {
+                        padding: 0.5em;
+                    }
+
+                }
+
+            }
+            
+        }
+
+    }
+
+    ::ng-deep {
+    
+        .ql-toolbar {
+            position: fixed;
+            min-width: max-content;
+            padding: 0.15em;
+            transform: translate(0.5em, calc(-100% - 0.25em));
+            box-shadow: 0 0 4px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+            z-index: 3;
+        }
+
+        .ql-tooltip {
+            z-index: 1;
+        }
+
+        .p-editor-container {
+
+            .p-editor-content {
+                border: none;
+                border-radius: 0.25rem;
+
+                .ql-editor {
+                    padding: 0;
+                }
+
+            }
+
+        }
+
+    }
+
+}

@@ -1,0 +1,36 @@
+.add-task-wrapper {
+    --padding: 1rem;
+    
+    .content {
+        padding: var(--padding);
+    }
+
+    .footer {
+        display: flex;
+        padding: var(--padding);
+        border-top: solid 1px var(--border-color);
+
+        .action-buttons {
+            display: flex;
+            margin-left: auto;
+            flex-direction: row-reverse;
+            gap: 0.5em;
+        }
+
+    }
+
+}
+
+
+.field-title {
+
+    ::ng-deep {
+        
+        .p-editor-content {
+            font-size: 1.25rem;
+            font-weight: var(--font-weight-bold);
+        }
+
+    }
+
+}

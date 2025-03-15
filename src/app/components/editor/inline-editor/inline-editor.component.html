@@ -1,0 +1,33 @@
+<div class="inline-editor"
+    [class.show-toolbar]="toolbar"
+    [class.border]="borderStyle"
+>
+    <ng-template *ngIf="fformGroup && fformControlName; else templateDrivenFormTemplate"
+        [ngTemplateOutlet]="reactiveFormTemplate"
+    ></ng-template>
+</div>
+
+
+<!-- templates -->
+
+<ng-template #reactiveFormTemplate>
+    <ng-container [formGroup]="fformGroup">
+        <p-editor #editor
+            [formControlName]="fformControlName"
+            [placeholder]="placeholder"
+            (onSelectionChange)="onSelection()"
+        >
+        </p-editor>
+    </ng-container>
+</ng-template>
+
+
+<ng-template #templateDrivenFormTemplate>
+    <p-editor #editor
+        [(ngModel)]="model"
+        [placeholder]="placeholder"
+        (onSelectionChange)="onSelection()"
+        (onTextChange)="onText()"
+    >
+    </p-editor>
+</ng-template>

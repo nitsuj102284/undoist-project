@@ -32,6 +32,11 @@
               },
               "src/assets"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/scss"
+              ]
+            },
             "styles": [
               "src/assets/scss/styles.scss",
               "src/assets/scss/colors.scss",

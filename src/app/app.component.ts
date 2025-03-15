@@ -2,8 +2,12 @@ import { Component, Inject, Renderer2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NavPanelComponent } from './components/nav-panel/nav-panel.component';
 import { HeaderComponent } from './components/header/header.component';
-import { filter, tap } from 'rxjs';
+import { filter, take, tap } from 'rxjs';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import { ProjectService } from './services/project/project.service';
+import { AddTaskComponent } from "./components/task/add-task/add-task.component";
+import { DialogModule } from 'primeng/dialog';
+import { TaskService } from './services/task/task.service';
 
 @Component({
   selector: 'app-root',
@@ -11,22 +15,29 @@ import { CommonModule, DOCUMENT } from '@angular/common';
     CommonModule,
     RouterOutlet,
     HeaderComponent,
-    NavPanelComponent
-  ],
+    NavPanelComponent,
+    AddTaskComponent,
+    DialogModule
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
 
+  addTaskDialog: boolean;
   kiosk: boolean;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
+    private projectService: ProjectService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private taskService: TaskService
   ) {
     this.initRouterEventsSubscription();
+    this.initAddTaskDialogSubscription();
+    this.setInitialProject();
   }
 
   initRouterEventsSubscription(): void {
@@ -39,6 +50,23 @@ export class AppComponent {
         })
       )
       .subscribe();
+  }
+
+  initAddTaskDialogSubscription(): void {
+    this.taskService.showAddTaskDialog$
+      .pipe(
+        tap(show => this.addTaskDialog = show)
+      )
+      .subscribe();
+  }
+
+  setInitialProject(): void {
+    this.projectService.projects$
+      .pipe(
+        filter(projects => !!projects.length),
+        take(1),
+      )
+      .subscribe(() => this.projectService.setCurrentProject());
   }
 
   setKioskMode(): void {
@@ -63,6 +91,14 @@ export class AppComponent {
       const className: string = `${classPrefix}${viewClass}`;
       this.renderer.addClass(body, className);
     };
+  }
+
+  onAddTaskDialogSave(): void {
+    this.addTaskDialog = false;
+  }
+
+  onAddTaskDialogCancel(): void {
+    this.addTaskDialog = false;
   }
 
 }

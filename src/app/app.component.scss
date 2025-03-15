@@ -1,17 +1,25 @@
 .layout-wrapper {
     display: flex;
-    gap: 2em;
+    height: 100vh;
+    overflow: hidden;
 
     .layout-main {
         display: flex;
+        min-width: 0;
         flex: 1;
         flex-direction: column;
 
-        main {
-            width: 100%;
-            max-width: 60em;
-            padding: 1em;
-            margin: 0 auto;
+        .content {
+            overflow-y: scroll;
+            padding: 0 1em;
+
+            main {
+                width: 100%;
+                max-width: 53em;
+                padding: 1em;
+                margin: 0 auto;
+            }
+
         }
     }
 

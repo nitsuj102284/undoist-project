@@ -1,23 +1,55 @@
-.task-group {
-    margin-top: 2em;
+@use  'variables.scss' as variables;
 
-    .task-group-header {
-        padding-bottom: 0.25em;
-        border-bottom: solid 1px var(--p-gray-200);
-        font-weight: bold;
-    }
+    
+:host ::ng-deep {
 
-    .tasks {
-        margin-left: 1em;
+    .task-groups {
+        display: block;
+        margin-top: 2em;
+
+        .p-accordionheader {
+            padding-left: 0 !important;
+        }
+
     }
 
 }
 
 .tasks {
+    min-width: 0;
 
     .task {
+        display: flex;
+        min-width: 0;
         padding: 1em 0;
-        border-bottom: solid 1px var(--p-gray-200);
+        border-bottom: solid 1px var(--border-color);
+        gap: 1em;
+
+        .task-content {
+            min-width: 0;
+        }
+
+        .title,
+        .description,
+        ::ng-deep p {
+            @include variables.nowrap-text;
+        }
+
+        .description {
+            margin-top: 0.5em;
+            font-size: 0.85em;
+            color: var(--text-color-light);
+
+            &:empty {
+                display: none;
+            }
+
+        }
+
+        ::ng-deep p {
+            display: inline;
+        }
+
     }
 
 }

@@ -1,3 +1,15 @@
 :root {
     --header-height: 3em;
+    --font-weight-bold: 500;
+}
+
+@mixin nowrap {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@mixin nowrap-text {
+    @include nowrap;
+    text-overflow: ellipsis;
 }

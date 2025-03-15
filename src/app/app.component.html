@@ -4,8 +4,31 @@
   </div>
   <div class="layout-main">
     <app-header *ngIf="!kiosk"></app-header>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
+    <div class="content">
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
   </div>
 </div>
+
+
+<!-- add task dialog -->
+<p-dialog
+  [(visible)]="addTaskDialog"
+  [modal]="true"
+  [draggable]="false"
+  [closeOnEscape]="true"
+  [closable]="false"
+  [closeOnEscape]="true"
+  maskStyleClass="transparent"
+  position="top"
+  appendTo="body"
+>
+  <ng-template #headless>
+    <app-add-task *ngIf="addTaskDialog"
+      (save)="onAddTaskDialogSave()"
+      (cancel)="onAddTaskDialogCancel()"
+    ></app-add-task>
+  </ng-template>
+</p-dialog>
