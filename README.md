@@ -105,3 +105,13 @@ ng serve
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`.
+
+
+## Some preliminary screenshots
+[Login view](screenshots/login_view.png)
+
+[Add task dialog](screenshots/add_task_dialog.png)
+
+[Add task dialog growing](screenshots/add_task_dialog_growing.png)
+
+[Project/task list view](screenshots/project_task_list_view.png)
