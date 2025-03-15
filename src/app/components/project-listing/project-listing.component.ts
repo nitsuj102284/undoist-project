@@ -31,7 +31,9 @@ export class ProjectListingComponent implements OnDestroy {
     this.projectService.projects$
       .pipe(
         takeUntil(this.unsubscribe),
-        tap(projects => this.projects = projects),
+        tap(projects => this.projects = projects
+          .filter(p => !p.isDefault)
+        ),
       )
       .subscribe();
   }

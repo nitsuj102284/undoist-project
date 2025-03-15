@@ -73,7 +73,6 @@ export class ProjectService {
       .pipe(
         tap(projects => {
           projects = projects
-            .filter(p => !p.isDefault)
             .sort(this.helperService.defaultSort);
           this._projectsSubject$.next(projects);
         })

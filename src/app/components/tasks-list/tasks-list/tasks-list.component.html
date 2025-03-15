@@ -1,5 +1,5 @@
 <!-- catch-all task group -->
-<ng-container *ngIf="defaultTaskGroup?.tasks.length">
+<ng-container *ngIf="defaultTaskGroup?.tasks?.length">
     <ng-template *ngTemplateOutlet="tasksTemplate; context: { $implicit: defaultTaskGroup }"></ng-template>
 </ng-container>
 
